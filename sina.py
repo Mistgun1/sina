@@ -1,6 +1,7 @@
-from tpb import TPB
-from tpb import CATEGORIES, ORDERS
 import subprocess, sys
+
+from pb_scraper import TorrentFinder
+
 
 def NumberOfTitles(text):
     TitlesNumberMarker = "titles</li></ul><div"
@@ -33,7 +34,6 @@ def MovieTitle(text,movie_number):
         i += 1
     return movie_title
 
-t = TPB('https://thepiratebay.org/')
 
 command = 'curl -L      -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"  -H "Connection: keep-alive" "https://www.imdb.com/user/ur198572812/watchlist/?ref_=nv_usr_wl_all_0" --output mylist.txt'
 subprocess.run(command,shell=True,executable="/bin/bash")
@@ -50,6 +50,36 @@ for i in range(TitlesNumber):
     movie_titles.append(movie_title)
     print(str(i)+'. '+movie_title)    
 k = int(input("Type the number of the movie to download :"))
-for torrent in t.search(movie_titles[k]):
-    print(torrent.files)
+
+scrape = TorrentFinder()
+data = scrape.search_hd_movies(movie_titles[k])
+if len(data)>5 :
+    for i in range(5):
+        print('Title: ' + data[i]['title'])
+        #print('Magnet: ' + result['magnet'])
+        print('Size: ' + data[i]['size'])
+        print('Seeders: ' + data[i]['seeders'])
+        print('Leechers: ' + data[i]['leechers'])
+        print('_______________________________________________________________')
+else:    
+    for result in data:
+        print('Title: ' + result['title'])
+        #print('Magnet: ' + result['magnet'])
+        print('Size: ' + result['size'])
+        print('Seeders: ' + result['seeders'])
+        print('Leechers: ' + result['leechers'])
+        print('_______________________________________________________________')
+
+
+torrent_file=input()
+
+
+
 f.close()
+
+command = 'rm -r mylist.txt'
+subprocess.run(command,shell=True,executable="/bin/bash")
+
+
+#if __name__=='__main__' :
+
