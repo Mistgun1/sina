@@ -42,7 +42,6 @@ class TorrentFinder:
                         magnet = magnet_link_tag['href']
                     else:
                         magnet = None
-
                     title_tag = tds[1].find('a', class_='detLink')
                     if title_tag:
                         title = title_tag.get('title', '').replace('Details for ', '')
@@ -116,9 +115,9 @@ class TorrentFinder:
     def search_hd_tv_shows(self, query):
         try:
             url = f'https://{self.base_domain}/search/{query}/1/99/208'
-            logging.info(f'Searching HD TV shows with query: {query}')
+            #logging.info(f'Searching HD TV shows with query: {query}')
             html = self.fetch_html(url)
-            logging.debug(f'HTML content: {html[:500]}')
+            #logging.debug(f'HTML content: {html[:500]}')
             soup = BeautifulSoup(html, 'html.parser')
 
             results = []
@@ -126,7 +125,7 @@ class TorrentFinder:
                 tds = trs.find_all('td')
 
                 if len(tds) > 1:
-                    logging.debug(f'Table row content: {tds}')
+                    #logging.debug(f'Table row content: {tds}')
                     # Find the link tag containing the magnet link
                     magnet_link_tag = tds[1].find('a', href=True, title="Download this torrent using magnet")
 
